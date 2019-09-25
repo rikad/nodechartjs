@@ -1,0 +1,91 @@
+
+<!doctype html>
+<html>
+
+<head>
+	<title>Line Chart</title>
+</head>
+
+<body>
+	<div style="width:75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+	<br>
+	<br>
+
+	<button onclick="btnAdd()">Add Data</button>
+
+	<script src="Chart.min.js"></script>
+	<script src="utils.js"></script>
+    <script>
+
+        var ctx = document.getElementById('canvas').getContext('2d');
+
+        var config = {
+			type: 'line',
+			data: {
+				labels: ['1', '2', '3', '4', '5', '6', '7'],
+				datasets: [{
+					label: 'Garis 1',
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+					fill: false,
+				}, {
+					label: 'Garis 2',
+					fill: false,
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+				}]
+			}
+		};
+
+        function addData(line1,line2) {
+			if (config.data.datasets.length > 0) {				
+				config.data.labels.push(config.data.labels.length+1);
+
+				config.data.datasets[0].data.push(line1);
+				config.data.datasets[1].data.push(line2);
+
+				mychart.update();
+			}
+		}
+		
+		function btnAdd() {
+			addData(randomScalingFactor(),randomScalingFactor());
+		}
+
+		async function getData() {
+			var response = await fetch('http://localhost:3000/api/data');
+			var data = await response.json();
+
+			addData(data.line1,data.line2);
+
+			setTimeout(function(){ getData() }, 1000); //delay 1 seconds and loop			
+		}
+
+		var mychart = new Chart(ctx, config);
+		
+		getData();
+
+</script>
+</body>
+
+</html>
