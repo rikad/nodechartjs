@@ -59,13 +59,15 @@
 
         function addData(line1,line2) {
 			if (config.data.datasets.length > 0) {				
-				config.data.labels.push(config.data.labels.length+1);
-
-				config.data.datasets[0].data.push(line1);
-				config.data.datasets[1].data.push(line2);
-
-				mychart.update();
+				config.data.datasets[0].data.shift();
+				config.data.datasets[1].data.shift();
 			}
+
+			config.data.datasets[0].data.push(line1);
+			config.data.datasets[1].data.push(line2);
+
+			mychart.update();
+
 		}
 		
 		function btnAdd() {
