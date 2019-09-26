@@ -8,7 +8,8 @@ app.use(express.static('public'))
 app.get('/api/data', function (req, res) { 
     var data = {
         line1 : Math.floor(Math.random() * 100),
-        line2 : Math.floor(Math.random() * 100)
+        line2 : Math.floor(Math.random() * 100),
+        gauge : Math.floor(Math.random() * 100)
     }
 
     res.send(data) 

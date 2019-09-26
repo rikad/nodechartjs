@@ -4,6 +4,7 @@
   "description": "latihan express & chartJs",
   "main": "index.js",
   "dependencies": {
+    "canvas-gauges": "^2.1.5",
     "express": "^4.17.1"
   },
   "devDependencies": {},
