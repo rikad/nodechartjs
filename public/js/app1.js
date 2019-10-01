@@ -72,15 +72,6 @@ new RadialGauge({
 	animationDuration: 500
 }).draw();
 
-async function getData() {
-	var response = await fetch('http://localhost:3000/api/data');
-	var data = await response.json();
-
-	changeChart(data.line1,data.line2);
-	changeGauges(data.gauge);
-
-	setTimeout(function(){ getData() }, 1000); //delay 1 seconds and loop			
-}
 
 function changeGauges(value) {
     document.gauges.forEach(function(gauge) {
@@ -100,4 +91,16 @@ function changeChart(line1,line2) {
 	mychart.update();
 }
 
-getData(); //start
+var client = mqtt.connect();
+
+client.subscribe("mqtt/demo"); //subscribe topics
+
+client.on("message", function(topic, payload) {  //handle incoming message from broker
+	var string = new TextDecoder("utf-8").decode(payload);
+        var data = JSON.parse(string)  // string to object js
+
+	console.log(string);
+	changeGauges(data.gauge);
+	changeChart(data.line1, data.line2);
+});
+
